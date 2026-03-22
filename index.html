@@ -1,11 +1,1445 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Destello Amatista | Joyería de Lujo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #C9A84C;
+      --gold-light: #E8C97A;
+      --gold-dark: #8A6A1E;
+      --black: #050505;
+      --black-soft: #0F0F0F;
+      --black-mid: #181818;
+      --black-card: #111111;
+      --white: #F5F0E8;
+      --amethyst: #7B4FA6;
+      --amethyst-light: #A56FD3;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--black);
+      color: var(--white);
+      font-family: 'Raleway', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom Cursor */
+    .cursor {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--gold);
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+      mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.18s ease-out, width 0.3s, height 0.3s;
+      opacity: 0.7;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dark); }
+
+    /* NOISE TEXTURE */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9990;
+      opacity: 0.4;
+    }
+
+    /* FONTS */
+    .font-cinzel { font-family: 'Cinzel', serif; }
+    .font-cormorant { font-family: 'Cormorant Garamond', serif; }
+
+    /* GOLD TEXT */
+    .text-gold { color: var(--gold); }
+    .text-gold-light { color: var(--gold-light); }
+
+    /* GRADIENT GOLD TEXT */
+    .gold-gradient {
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold-light), var(--gold), var(--gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* LINES */
+    .gold-line {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .gold-line-v {
+      width: 1px;
+      background: linear-gradient(180deg, transparent, var(--gold), transparent);
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(5,5,5,0.85);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+      transition: all 0.4s ease;
+    }
+    nav.scrolled {
+      background: rgba(5,5,5,0.97);
+      border-bottom-color: rgba(201,168,76,0.3);
+    }
+    .nav-link {
+      font-family: 'Cinzel', serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      color: rgba(245,240,232,0.7);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.3s;
+      position: relative;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0; right: 0;
+      height: 1px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 0.35s ease;
+    }
+    .nav-link:hover { color: var(--gold-light); }
+    .nav-link:hover::after { transform: scaleX(1); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 80% 50%, rgba(123,79,166,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 20% 80%, rgba(201,168,76,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,0.05) 0%, transparent 50%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+      background-size: 80px 80px;
+    }
+    .hero-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(3.5rem, 9vw, 9rem);
+      font-weight: 700;
+      line-height: 0.9;
+      letter-spacing: -0.01em;
+    }
+    .hero-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.1rem, 2.5vw, 1.7rem);
+      font-style: italic;
+      font-weight: 300;
+      color: rgba(245,240,232,0.65);
+      letter-spacing: 0.08em;
+    }
+    .hero-badge {
+      display: inline-block;
+      border: 1px solid var(--gold);
+      padding: 6px 22px;
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(201,168,76,0.06);
+    }
+
+    /* FLOATING GEMS */
+    .gem {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0;
+      animation: floatGem 6s ease-in-out infinite;
+    }
+    @keyframes floatGem {
+      0% { transform: translateY(20px) rotate(0deg); opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 0.7; }
+      100% { transform: translateY(-20px) rotate(15deg); opacity: 0; }
+    }
+
+    /* MARQUEE */
+    .marquee-track {
+      display: flex;
+      gap: 3rem;
+      animation: marquee 22s linear infinite;
+      white-space: nowrap;
+    }
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .marquee-item {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: rgba(201,168,76,0.5);
+      flex-shrink: 0;
+    }
+
+    /* SECTION TITLE */
+    .section-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .section-eyebrow::before,
+    .section-eyebrow::after {
+      content: '';
+      flex: 1;
+      max-width: 40px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.5;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+    }
+
+    /* PRODUCT CARD */
+    .product-card {
+      background: var(--black-card);
+      border: 1px solid rgba(201,168,76,0.12);
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.4s, transform 0.4s;
+      cursor: none;
+    }
+    .product-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(201,168,76,0.04) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .product-card:hover {
+      border-color: rgba(201,168,76,0.45);
+      transform: translateY(-6px);
+    }
+    .product-card:hover::before { opacity: 1; }
+
+    .product-img-wrap {
+      position: relative;
+      overflow: hidden;
+      background: var(--black-mid);
+      aspect-ratio: 1/1;
+    }
+    .product-img-bg {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 5rem;
+      position: relative;
+    }
+    .product-img-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(201,168,76,0.1) 0%, transparent 70%);
+    }
+    .product-overlay {
+      position: absolute; inset: 0;
+      background: rgba(5,5,5,0.6);
+      display: flex; align-items: center; justify-content: center;
+      gap: 1rem;
+      opacity: 0;
+      transition: opacity 0.35s;
+      backdrop-filter: blur(4px);
+    }
+    .product-card:hover .product-overlay { opacity: 1; }
+
+    .product-tag {
+      position: absolute; top: 12px; left: 12px;
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+    }
+    .tag-new { background: var(--gold); color: var(--black); }
+    .tag-sale { background: var(--amethyst); color: white; }
+    .tag-exclusive { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
+
+    .product-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 400;
+      letter-spacing: 0.03em;
+      line-height: 1.3;
+    }
+    .product-category {
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.7;
+    }
+    .product-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--gold-light);
+    }
+    .product-price-old {
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.8rem;
+      color: rgba(245,240,232,0.35);
+      text-decoration: line-through;
+    }
+
+    /* BUTTONS */
+    .btn-gold {
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      background: var(--gold);
+      color: var(--black);
+      border: none;
+      padding: 14px 32px;
+      cursor: none;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+    .btn-gold::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.15);
+      transform: translateX(-110%) skewX(-20deg);
+      transition: transform 0.45s ease;
+    }
+    .btn-gold:hover { background: var(--gold-light); }
+    .btn-gold:hover::after { transform: translateX(110%) skewX(-20deg); }
+
+    .btn-outline {
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      background: transparent;
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      padding: 13px 32px;
+      cursor: none;
+      position: relative;
+      overflow: hidden;
+      transition: color 0.3s, background 0.3s;
+    }
+    .btn-outline:hover {
+      background: rgba(201,168,76,0.1);
+      color: var(--gold-light);
+    }
+
+    .btn-icon {
+      width: 40px; height: 40px;
+      border: 1px solid rgba(201,168,76,0.35);
+      background: transparent;
+      color: var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      cursor: none;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .btn-icon:hover {
+      background: rgba(201,168,76,0.15);
+      border-color: var(--gold);
+    }
+
+    /* FILTER TABS */
+    .filter-tab {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      padding: 8px 22px;
+      border: 1px solid rgba(201,168,76,0.25);
+      color: rgba(245,240,232,0.5);
+      background: transparent;
+      cursor: none;
+      transition: all 0.3s;
+    }
+    .filter-tab.active, .filter-tab:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(201,168,76,0.08);
+    }
+
+    /* COUNTER */
+    .stat-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 300;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .stat-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.5);
+    }
+
+    /* TESTIMONIAL */
+    .testimonial-card {
+      background: var(--black-card);
+      border: 1px solid rgba(201,168,76,0.12);
+      padding: 2.5rem;
+      position: relative;
+    }
+    .testimonial-card::before {
+      content: '"';
+      position: absolute;
+      top: 1rem; left: 1.5rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 6rem;
+      color: var(--gold);
+      opacity: 0.15;
+      line-height: 1;
+    }
+    .testimonial-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-style: italic;
+      font-weight: 300;
+      line-height: 1.7;
+      color: rgba(245,240,232,0.8);
+    }
+    .testimonial-author {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .stars { color: var(--gold); font-size: 0.75rem; letter-spacing: 3px; }
+
+    /* NEWSLETTER */
+    .newsletter-input {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,168,76,0.25);
+      color: var(--white);
+      padding: 14px 20px;
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.85rem;
+      width: 100%;
+      transition: border-color 0.3s;
+      outline: none;
+    }
+    .newsletter-input:focus { border-color: var(--gold); }
+    .newsletter-input::placeholder { color: rgba(245,240,232,0.3); }
+
+    /* CATEGORY CARD */
+    .category-card {
+      position: relative;
+      overflow: hidden;
+      cursor: none;
+      background: var(--black-mid);
+      border: 1px solid rgba(201,168,76,0.1);
+    }
+    .category-card-inner {
+      padding: 3rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      transition: transform 0.4s;
+    }
+    .category-card:hover .category-card-inner { transform: scale(1.03); }
+    .category-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      transform: scaleX(0);
+      transition: transform 0.4s;
+    }
+    .category-card:hover::after { transform: scaleX(1); }
+
+    .cat-icon {
+      font-size: 3rem;
+      display: block;
+      filter: drop-shadow(0 0 20px rgba(201,168,76,0.4));
+    }
+    .cat-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .cat-count {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.9rem;
+      color: rgba(245,240,232,0.4);
+    }
+
+    /* CART SIDEBAR */
+    .cart-sidebar {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 400px;
+      background: var(--black-soft);
+      border-left: 1px solid rgba(201,168,76,0.2);
+      z-index: 2000;
+      transform: translateX(100%);
+      transition: transform 0.45s cubic-bezier(0.77,0,0.175,1);
+      display: flex; flex-direction: column;
+      overflow-y: auto;
+    }
+    .cart-sidebar.open { transform: translateX(0); }
+    .cart-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 1999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s;
+      backdrop-filter: blur(4px);
+    }
+    .cart-overlay.open { opacity: 1; pointer-events: all; }
+
+    /* NOTIFICATION */
+    .notification {
+      position: fixed;
+      top: 100px; right: 24px;
+      background: var(--black-card);
+      border: 1px solid var(--gold);
+      padding: 1rem 1.5rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      z-index: 3000;
+      transform: translateX(120%);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .notification.show { transform: translateX(0); }
+
+    /* ANIMATIONS */
+    @keyframes shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+    .shimmer-text {
+      background: linear-gradient(90deg, var(--gold-dark) 0%, var(--gold-light) 40%, var(--gold) 50%, var(--gold-light) 60%, var(--gold-dark) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 4s linear infinite;
+    }
+
+    @keyframes pulse-ring {
+      0% { box-shadow: 0 0 0 0 rgba(201,168,76,0.3); }
+      70% { box-shadow: 0 0 0 20px rgba(201,168,76,0); }
+      100% { box-shadow: 0 0 0 0 rgba(201,168,76,0); }
+    }
+    .pulse { animation: pulse-ring 2.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite; }
+
+    @keyframes reveal-up {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .reveal { opacity: 0; }
+    .reveal.visible { animation: reveal-up 0.7s ease forwards; }
+
+    /* FOOTER */
+    footer {
+      background: var(--black-soft);
+      border-top: 1px solid rgba(201,168,76,0.15);
+    }
+    .footer-link {
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.82rem;
+      color: rgba(245,240,232,0.45);
+      text-decoration: none;
+      transition: color 0.3s;
+      display: block;
+      margin-bottom: 0.6rem;
+    }
+    .footer-link:hover { color: var(--gold); }
+
+    /* WISHLIST */
+    .wishlist-btn {
+      position: absolute; top: 12px; right: 12px;
+      background: rgba(5,5,5,0.7);
+      border: 1px solid rgba(201,168,76,0.25);
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(245,240,232,0.6);
+      cursor: none;
+      transition: all 0.3s;
+      font-size: 1rem;
+    }
+    .wishlist-btn:hover, .wishlist-btn.active { color: #e53e3e; border-color: #e53e3e; }
+
+    /* RATING STARS */
+    .rating { display: flex; gap: 2px; }
+    .rating span { color: var(--gold); font-size: 0.7rem; }
+
+    /* MOBILE MENU */
+    .mobile-menu {
+      position: fixed;
+      inset: 0;
+      background: var(--black);
+      z-index: 1500;
+      transform: translateY(-100%);
+      transition: transform 0.5s cubic-bezier(0.77,0,0.175,1);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 2rem;
+    }
+    .mobile-menu.open { transform: translateY(0); }
+    .mobile-nav-link {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      font-weight: 300;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color 0.3s;
+    }
+    .mobile-nav-link:hover { color: var(--gold); }
+
+    /* TOOLTIP */
+    [data-tooltip] {
+      position: relative;
+    }
+    [data-tooltip]::before {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--black-card);
+      border: 1px solid rgba(201,168,76,0.3);
+      color: var(--gold);
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      padding: 5px 12px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      text-transform: uppercase;
+    }
+    [data-tooltip]:hover::before { opacity: 1; }
+
+    /* PROGRESS BAR */
+    .progress-bar {
+      height: 2px;
+      background: rgba(201,168,76,0.15);
+      position: relative;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold-dark), var(--gold-light));
+      transition: width 1s ease;
+    }
+  </style>
 </head>
 <body>
-    
+
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Notification -->
+<div class="notification" id="notification">✦ Añadido al carrito</div>
+
+<!-- Cart Overlay -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+
+<!-- Cart Sidebar -->
+<div class="cart-sidebar" id="cartSidebar">
+  <div style="padding:2rem; border-bottom:1px solid rgba(201,168,76,0.15);">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <h2 class="font-cinzel" style="font-size:0.75rem;letter-spacing:0.3em;color:var(--gold);">CARRITO</h2>
+      <button onclick="toggleCart()" style="background:none;border:none;color:var(--white);font-size:1.3rem;cursor:none;">✕</button>
+    </div>
+  </div>
+  <div id="cartItems" style="flex:1;padding:1.5rem;overflow-y:auto;">
+    <p id="emptyCart" style="font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(245,240,232,0.4);text-align:center;margin-top:3rem;font-size:1.1rem;">Tu carrito está vacío</p>
+  </div>
+  <div style="padding:1.5rem; border-top:1px solid rgba(201,168,76,0.15);">
+    <div style="display:flex;justify-content:space-between;margin-bottom:1.5rem;">
+      <span class="font-cinzel" style="font-size:0.65rem;letter-spacing:0.2em;color:rgba(245,240,232,0.6);">TOTAL</span>
+      <span class="font-cormorant" style="font-size:1.5rem;color:var(--gold-light);" id="cartTotal">$0</span>
+    </div>
+    <button class="btn-gold" style="width:100%;text-align:center;" onclick="checkout()">Finalizar Compra</button>
+  </div>
+</div>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <div class="gold-line" style="width:60px;"></div>
+  <a href="#inicio" class="mobile-nav-link" onclick="closeMobileMenu()">Inicio</a>
+  <a href="#colecciones" class="mobile-nav-link" onclick="closeMobileMenu()">Colecciones</a>
+  <a href="#catalogo" class="mobile-nav-link" onclick="closeMobileMenu()">Catálogo</a>
+  <a href="#nosotros" class="mobile-nav-link" onclick="closeMobileMenu()">Nosotros</a>
+  <a href="#contacto" class="mobile-nav-link" onclick="closeMobileMenu()">Contacto</a>
+  <div class="gold-line" style="width:60px;"></div>
+</div>
+
+<!-- ====== NAV ====== -->
+<nav id="navbar">
+  <div style="max-width:1400px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:72px;">
+    <button id="menuBtn" style="background:none;border:none;cursor:none;display:flex;flex-direction:column;gap:5px;padding:8px;" onclick="toggleMobileMenu()">
+      <span style="width:22px;height:1px;background:var(--gold);display:block;transition:all 0.3s;"></span>
+      <span style="width:16px;height:1px;background:var(--gold);display:block;transition:all 0.3s;"></span>
+      <span style="width:22px;height:1px;background:var(--gold);display:block;transition:all 0.3s;"></span>
+    </button>
+
+    <div style="position:absolute;left:50%;transform:translateX(-50%);">
+      <a href="#inicio" style="text-decoration:none;">
+        <div class="font-cinzel shimmer-text" style="font-size:1.3rem;letter-spacing:0.2em;font-weight:700;">DESTELLO AMATISTA</div>
+        <div style="text-align:center;margin-top:-3px;"><span class="gold-line" style="width:100%;display:block;opacity:0.4;"></span></div>
+        <div class="font-cinzel" style="font-size:0.45rem;letter-spacing:0.5em;text-align:center;color:rgba(201,168,76,0.6);text-transform:uppercase;margin-top:2px;">Joyería de Lujo</div>
+      </a>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:1.2rem;">
+      <button class="btn-icon" data-tooltip="Búsqueda" onclick="alert('Búsqueda')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <button class="btn-icon" data-tooltip="Lista de deseos" onclick="alert('Lista de deseos')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </button>
+      <button class="btn-icon pulse" data-tooltip="Carrito" onclick="toggleCart()" style="position:relative;">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span id="cartBadge" style="position:absolute;top:-6px;right:-6px;background:var(--gold);color:var(--black);border-radius:50%;width:18px;height:18px;font-size:0.55rem;font-family:'Cinzel',serif;display:flex;align-items:center;justify-content:center;display:none;">0</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ====== HERO ====== -->
+<section class="hero" id="inicio">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <!-- Floating gems -->
+  <div class="gem" style="top:15%;left:8%;animation-delay:0s;animation-duration:7s;font-size:1.2rem;">💎</div>
+  <div class="gem" style="top:70%;left:5%;animation-delay:2s;animation-duration:9s;font-size:0.8rem;">✦</div>
+  <div class="gem" style="top:25%;right:10%;animation-delay:1s;animation-duration:8s;font-size:1rem;">💜</div>
+  <div class="gem" style="top:60%;right:7%;animation-delay:3s;animation-duration:6s;font-size:0.7rem;">✦</div>
+  <div class="gem" style="top:80%;left:20%;animation-delay:1.5s;animation-duration:7s;font-size:0.9rem;">✦</div>
+  <div class="gem" style="top:40%;right:4%;animation-delay:0.5s;animation-duration:10s;font-size:1.1rem;">♦</div>
+
+  <div style="max-width:1400px;margin:0 auto;padding:0 2rem;width:100%;position:relative;z-index:10;padding-top:6rem;">
+    <div style="max-width:800px;">
+      <div class="reveal" id="rev1" style="margin-bottom:2rem;">
+        <span class="hero-badge">✦ &nbsp; Nueva Colección 2025 &nbsp; ✦</span>
+      </div>
+      <h1 class="hero-title reveal gold-gradient" id="rev2" style="animation-delay:0.15s;">
+        DONDE<br>
+        <em style="font-style:italic;font-weight:300;color:var(--white);-webkit-text-fill-color:var(--white);">BRILLA</em><br>
+        EL ALMA
+      </h1>
+      <div class="gold-line" style="width:120px;margin:2.5rem 0;"></div>
+      <p class="hero-sub reveal" id="rev3" style="animation-delay:0.3s;margin-bottom:3rem;max-width:460px;">
+        Cada pieza es una historia tallada en oro y piedras preciosas. Joyería que trasciende el tiempo y celebra quién eres.
+      </p>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;" class="reveal" id="rev4" style="animation-delay:0.45s;">
+        <button class="btn-gold" onclick="document.getElementById('catalogo').scrollIntoView({behavior:'smooth'})">Explorar Colección</button>
+        <button class="btn-outline" onclick="document.getElementById('nosotros').scrollIntoView({behavior:'smooth'})">Nuestra Historia</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div style="position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:0.5rem;">
+    <span class="font-cinzel" style="font-size:0.5rem;letter-spacing:0.5em;color:rgba(201,168,76,0.5);text-transform:uppercase;">Descubrir</span>
+    <div style="width:1px;height:50px;background:linear-gradient(180deg,var(--gold) 0%,transparent 100%);animation:pulse-line 2s ease-in-out infinite;"></div>
+  </div>
+</section>
+
+<!-- MARQUEE STRIP -->
+<div style="overflow:hidden;background:rgba(201,168,76,0.05);border-top:1px solid rgba(201,168,76,0.1);border-bottom:1px solid rgba(201,168,76,0.1);padding:16px 0;">
+  <div class="marquee-track" id="marqueeTrack">
+    <span class="marquee-item">✦ Joyería Artesanal</span>
+    <span class="marquee-item">✦ Oro 18 Quilates</span>
+    <span class="marquee-item">✦ Piedras Certificadas</span>
+    <span class="marquee-item">✦ Envío Gratis</span>
+    <span class="marquee-item">✦ Garantía de por Vida</span>
+    <span class="marquee-item">✦ Diseño Exclusivo</span>
+    <span class="marquee-item">✦ Joyería Artesanal</span>
+    <span class="marquee-item">✦ Oro 18 Quilates</span>
+    <span class="marquee-item">✦ Piedras Certificadas</span>
+    <span class="marquee-item">✦ Envío Gratis</span>
+    <span class="marquee-item">✦ Garantía de por Vida</span>
+    <span class="marquee-item">✦ Diseño Exclusivo</span>
+  </div>
+</div>
+
+<!-- ====== CATEGORIES ====== -->
+<section id="colecciones" style="padding:8rem 2rem;">
+  <div style="max-width:1400px;margin:0 auto;">
+    <div style="text-align:center;margin-bottom:5rem;">
+      <div class="section-eyebrow" style="justify-content:center;margin-bottom:1.2rem;">Explorar</div>
+      <h2 class="section-title reveal">Nuestras <em>Colecciones</em></h2>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1.5rem;">
+      <div class="category-card reveal" onclick="filterCategory('anillos')">
+        <div class="category-card-inner">
+          <span class="cat-icon">💍</span>
+          <span class="cat-name">Anillos</span>
+          <span class="cat-count">24 piezas</span>
+        </div>
+      </div>
+      <div class="category-card reveal" onclick="filterCategory('collares')">
+        <div class="category-card-inner">
+          <span class="cat-icon">📿</span>
+          <span class="cat-name">Collares</span>
+          <span class="cat-count">18 piezas</span>
+        </div>
+      </div>
+      <div class="category-card reveal" onclick="filterCategory('aretes')">
+        <div class="category-card-inner">
+          <span class="cat-icon">✨</span>
+          <span class="cat-name">Aretes</span>
+          <span class="cat-count">32 piezas</span>
+        </div>
+      </div>
+      <div class="category-card reveal" onclick="filterCategory('pulseras')">
+        <div class="category-card-inner">
+          <span class="cat-icon">🌟</span>
+          <span class="cat-name">Pulseras</span>
+          <span class="cat-count">15 piezas</span>
+        </div>
+      </div>
+      <div class="category-card reveal" onclick="filterCategory('sets')">
+        <div class="category-card-inner">
+          <span class="cat-icon">💎</span>
+          <span class="cat-name">Sets</span>
+          <span class="cat-count">10 piezas</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== CATALOG ====== -->
+<section id="catalogo" style="padding:4rem 2rem 8rem;">
+  <div style="max-width:1400px;margin:0 auto;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:2rem;margin-bottom:4rem;">
+      <div>
+        <div class="section-eyebrow" style="margin-bottom:1.2rem;">Catálogo</div>
+        <h2 class="section-title">Piezas <em>Exclusivas</em></h2>
+      </div>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;" id="filterTabs">
+        <button class="filter-tab active" data-filter="todos" onclick="setFilter(this,'todos')">Todos</button>
+        <button class="filter-tab" data-filter="nuevo" onclick="setFilter(this,'nuevo')">Nuevos</button>
+        <button class="filter-tab" data-filter="oferta" onclick="setFilter(this,'oferta')">Oferta</button>
+        <button class="filter-tab" data-filter="exclusivo" onclick="setFilter(this,'exclusivo')">Exclusivo</button>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2rem;" id="productGrid">
+      <!-- Products generated by JS -->
+    </div>
+
+    <div style="text-align:center;margin-top:4rem;">
+      <button class="btn-outline" onclick="loadMore()">Ver Más Piezas</button>
+    </div>
+  </div>
+</section>
+
+<!-- ====== BANNER ====== -->
+<section style="padding:0 2rem;margin-bottom:8rem;">
+  <div style="max-width:1400px;margin:0 auto;">
+    <div style="background:var(--black-mid);border:1px solid rgba(201,168,76,0.2);padding:5rem 3rem;text-align:center;position:relative;overflow:hidden;">
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 50% 50%,rgba(123,79,166,0.08) 0%,transparent 70%);"></div>
+      <div style="position:relative;z-index:2;">
+        <div class="section-eyebrow" style="justify-content:center;margin-bottom:1.5rem;">Oferta Especial</div>
+        <h2 class="font-cormorant" style="font-size:clamp(2.5rem,6vw,5rem);font-weight:300;margin-bottom:1rem;">
+          Hasta <span class="shimmer-text font-cinzel" style="font-size:inherit;">30% OFF</span>
+        </h2>
+        <p class="font-cormorant" style="font-size:1.2rem;font-style:italic;color:rgba(245,240,232,0.6);margin-bottom:2.5rem;max-width:500px;margin-left:auto;margin-right:auto;">
+          En toda la colección de aretes y collares. Por tiempo limitado.
+        </p>
+        <div id="countdown" style="display:flex;gap:2rem;justify-content:center;margin-bottom:2.5rem;flex-wrap:wrap;">
+          <div style="text-align:center;">
+            <div class="font-cormorant" style="font-size:3rem;font-weight:600;color:var(--gold);line-height:1;" id="cdHours">08</div>
+            <div class="font-cinzel" style="font-size:0.55rem;letter-spacing:0.3em;color:rgba(245,240,232,0.4);text-transform:uppercase;">Horas</div>
+          </div>
+          <div class="gold-line-v" style="height:60px;align-self:center;opacity:0.4;"></div>
+          <div style="text-align:center;">
+            <div class="font-cormorant" style="font-size:3rem;font-weight:600;color:var(--gold);line-height:1;" id="cdMins">34</div>
+            <div class="font-cinzel" style="font-size:0.55rem;letter-spacing:0.3em;color:rgba(245,240,232,0.4);text-transform:uppercase;">Minutos</div>
+          </div>
+          <div class="gold-line-v" style="height:60px;align-self:center;opacity:0.4;"></div>
+          <div style="text-align:center;">
+            <div class="font-cormorant" style="font-size:3rem;font-weight:600;color:var(--gold);line-height:1;" id="cdSecs">59</div>
+            <div class="font-cinzel" style="font-size:0.55rem;letter-spacing:0.3em;color:rgba(245,240,232,0.4);text-transform:uppercase;">Segundos</div>
+          </div>
+        </div>
+        <button class="btn-gold" onclick="document.getElementById('catalogo').scrollIntoView({behavior:'smooth'})">Aprovechar Oferta</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== STATS ====== -->
+<section style="padding:4rem 2rem 8rem;">
+  <div style="max-width:1400px;margin:0 auto;">
+    <div class="gold-line" style="margin-bottom:5rem;"></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:3rem;text-align:center;">
+      <div class="reveal">
+        <div class="stat-number" id="statPiezas">0</div>
+        <div class="stat-label" style="margin-top:0.5rem;">Piezas Únicas</div>
+      </div>
+      <div class="reveal">
+        <div class="stat-number" id="statClientes">0</div>
+        <div class="stat-label" style="margin-top:0.5rem;">Clientes Felices</div>
+      </div>
+      <div class="reveal">
+        <div class="stat-number" id="statAnos">0</div>
+        <div class="stat-label" style="margin-top:0.5rem;">Años de Experiencia</div>
+      </div>
+      <div class="reveal">
+        <div class="stat-number" id="statColecciones">0</div>
+        <div class="stat-label" style="margin-top:0.5rem;">Colecciones</div>
+      </div>
+    </div>
+    <div class="gold-line" style="margin-top:5rem;"></div>
+  </div>
+</section>
+
+<!-- ====== ABOUT ====== -->
+<section id="nosotros" style="padding:4rem 2rem 8rem;">
+  <div style="max-width:1400px;margin:0 auto;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;">
+      <div class="reveal">
+        <div class="section-eyebrow" style="margin-bottom:1.5rem;">Nuestra Historia</div>
+        <h2 class="section-title" style="margin-bottom:2rem;">Arte que <em>trasciende</em> generaciones</h2>
+        <div class="gold-line" style="width:80px;margin-bottom:2rem;"></div>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;line-height:1.9;color:rgba(245,240,232,0.75);margin-bottom:1.5rem;">
+          Desde 2005, Destello Amatista nació de la pasión por transformar los metales preciosos en obras de arte que cuentan historias únicas. Cada joya es creada a mano por nuestros maestros orfebres, quienes dedican horas de minucioso trabajo.
+        </p>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;line-height:1.9;color:rgba(245,240,232,0.55);margin-bottom:2.5rem;">
+          Utilizamos únicamente materiales de la más alta calidad: oro de 18 y 24 quilates, diamantes certificados y gemas naturales seleccionadas de los mejores yacimientos del mundo.
+        </p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2.5rem;">
+          <div style="border-left:2px solid var(--gold);padding-left:1rem;">
+            <div class="font-cormorant" style="font-size:1.5rem;color:var(--gold-light);">Oro 18K</div>
+            <div style="font-size:0.8rem;color:rgba(245,240,232,0.5);margin-top:0.3rem;">Garantizado</div>
+          </div>
+          <div style="border-left:2px solid var(--gold);padding-left:1rem;">
+            <div class="font-cormorant" style="font-size:1.5rem;color:var(--gold-light);">100%</div>
+            <div style="font-size:0.8rem;color:rgba(245,240,232,0.5);margin-top:0.3rem;">Artesanal</div>
+          </div>
+          <div style="border-left:2px solid var(--gold);padding-left:1rem;">
+            <div class="font-cormorant" style="font-size:1.5rem;color:var(--gold-light);">GIA</div>
+            <div style="font-size:0.8rem;color:rgba(245,240,232,0.5);margin-top:0.3rem;">Certificado</div>
+          </div>
+          <div style="border-left:2px solid var(--gold);padding-left:1rem;">
+            <div class="font-cormorant" style="font-size:1.5rem;color:var(--gold-light);">Vitalicio</div>
+            <div style="font-size:0.8rem;color:rgba(245,240,232,0.5);margin-top:0.3rem;">Garantía</div>
+          </div>
+        </div>
+        <button class="btn-gold">Conocer el Proceso</button>
+      </div>
+      <div class="reveal" style="position:relative;">
+        <div style="background:var(--black-mid);border:1px solid rgba(201,168,76,0.2);aspect-ratio:4/5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,rgba(123,79,166,0.15) 0%,transparent 60%),radial-gradient(circle at 80% 80%,rgba(201,168,76,0.08) 0%,transparent 50%);"></div>
+          <div style="font-size:8rem;filter:drop-shadow(0 0 40px rgba(201,168,76,0.5));">💍</div>
+          <div class="font-cinzel" style="font-size:0.65rem;letter-spacing:0.4em;color:var(--gold);text-transform:uppercase;">Maestría Orfebre</div>
+          <div class="gold-line" style="width:60px;"></div>
+          <div class="font-cormorant" style="font-size:1.1rem;font-style:italic;color:rgba(245,240,232,0.5);">20 años de tradición</div>
+        </div>
+        <div style="position:absolute;bottom:-2rem;right:-2rem;width:140px;height:140px;background:var(--black-card);border:1px solid rgba(201,168,76,0.3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.5rem;">
+          <div class="font-cormorant" style="font-size:2.5rem;color:var(--gold-light);font-weight:300;line-height:1;">★4.9</div>
+          <div class="font-cinzel" style="font-size:0.5rem;letter-spacing:0.25em;color:rgba(245,240,232,0.5);text-transform:uppercase;">Valoración</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+cualquier
+<!-- ====== FEATURES ====== -->
+<section style="padding:8rem 2rem;">
+  <div style="max-width:1400px;margin:0 auto;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:3rem;">
+      <div class="reveal" style="text-align:center;padding:2rem;">
+        <div style="font-size:2.5rem;margin-bottom:1.5rem;filter:drop-shadow(0 0 15px rgba(201,168,76,0.4));">🚚</div>
+        <div class="font-cinzel" style="font-size:0.7rem;letter-spacing:0.25em;color:var(--gold);text-transform:uppercase;margin-bottom:0.8rem;">Envío Gratuito</div>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1rem;color:rgba(245,240,232,0.55);font-style:italic;line-height:1.6;">En todos los pedidos superiores a $200.000 COP a nivel nacional.</p>
+      </div>
+      <div class="reveal" style="text-align:center;padding:2rem;">
+        <div style="font-size:2.5rem;margin-bottom:1.5rem;filter:drop-shadow(0 0 15px rgba(201,168,76,0.4));">🔒</div>
+        <div class="font-cinzel" style="font-size:0.7rem;letter-spacing:0.25em;color:var(--gold);text-transform:uppercase;margin-bottom:0.8rem;">Pago Seguro</div>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1rem;color:rgba(245,240,232,0.55);font-style:italic;line-height:1.6;">Transacciones cifradas y protegidas con los más altos estándares.</p>
+      </div>
+      <div class="reveal" style="text-align:center;padding:2rem;">
+        <div style="font-size:2.5rem;margin-bottom:1.5rem;filter:drop-shadow(0 0 15px rgba(201,168,76,0.4));">↩️</div>
+        <div class="font-cinzel" style="font-size:0.7rem;letter-spacing:0.25em;color:var(--gold);text-transform:uppercase;margin-bottom:0.8rem;">30 Días de Devolución</div>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1rem;color:rgba(245,240,232,0.55);font-style:italic;line-height:1.6;">Si no estás satisfecho, te devolvemos el dinero sin preguntas.</p>
+      </div>
+      <div class="reveal" style="text-align:center;padding:2rem;">
+        <div style="font-size:2.5rem;margin-bottom:1.5rem;filter:drop-shadow(0 0 15px rgba(201,168,76,0.4));">⚙️</div>
+        <div class="font-cinzel" style="font-size:0.7rem;letter-spacing:0.25em;color:var(--gold);text-transform:uppercase;margin-bottom:0.8rem;">Personalización</div>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1rem;color:rgba(245,240,232,0.55);font-style:italic;line-height:1.6;">Crea tu joya única con grabados y piedras a tu elección.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== NEWSLETTER ====== -->
+<section id="contacto" style="padding:8rem 2rem;background:var(--black-soft);">
+  <div style="max-width:700px;margin:0 auto;text-align:center;">
+    <div class="section-eyebrow" style="justify-content:center;margin-bottom:1.5rem;">Newsletter</div>
+    <h2 class="section-title" style="margin-bottom:1.5rem;">Únete al <em>mundo del lujo</em></h2>
+    <p class="font-cormorant" style="font-size:1.1rem;font-style:italic;color:rgba(245,240,232,0.55);margin-bottom:3rem;line-height:1.7;">
+      Sé el primero en conocer nuestras nuevas colecciones, ofertas exclusivas y eventos privados. Recibe un 10% de descuento en tu primera compra.
+    </p>
+    <div style="display:flex;gap:0;max-width:500px;margin:0 auto 1.5rem;">
+      <input class="newsletter-input" type="email" id="emailInput" placeholder="Tu correo electrónico" style="flex:1;">
+      <button class="btn-gold" onclick="subscribeNewsletter()" style="white-space:nowrap;padding:14px 28px;">Suscribir</button>
+    </div>
+    <p class="font-cinzel" style="font-size:0.5rem;letter-spacing:0.3em;color:rgba(245,240,232,0.3);text-transform:uppercase;">
+      ✦ Sin spam. Cancela cuando quieras. ✦
+    </p>
+  </div>
+</section>
+
+<!-- ====== FOOTER ====== -->
+<footer style="padding:5rem 2rem 2rem;">
+  <div style="max-width:1400px;margin:0 auto;">
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:4rem;margin-bottom:4rem;">
+      <div>
+        <div class="font-cinzel shimmer-text" style="font-size:1.4rem;letter-spacing:0.2em;margin-bottom:0.5rem;">DESTELLO AMATISTA</div>
+        <div class="gold-line" style="width:80px;margin-bottom:1.5rem;"></div>
+        <p class="font-cormorant" style="font-size:1rem;font-style:italic;color:rgba(245,240,232,0.45);line-height:1.8;max-width:280px;">
+          Arte en oro y piedras preciosas. Joyería artesanal de lujo para celebrar los momentos más importantes de tu vida.
+        </p>
+        <div style="display:flex;gap:1rem;margin-top:2rem;">
+          <button class="btn-icon" data-tooltip="Instagram" onclick="alert('Instagram')">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </button>
+          <button class="btn-icon" data-tooltip="Facebook" onclick="alert('Facebook')">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </button>
+          <button class="btn-icon" data-tooltip="WhatsApp" onclick="alert('WhatsApp')">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          </button>
+        </div>
+      </div>
+      <div>
+        <div class="font-cinzel" style="font-size:0.65rem;letter-spacing:0.3em;color:var(--gold);text-transform:uppercase;margin-bottom:1.5rem;">Colecciones</div>
+        <a href="#" class="footer-link">Anillos de Compromiso</a>
+        <a href="#" class="footer-link">Collares y Cadenas</a>
+        <a href="#" class="footer-link">Aretes de Lujo</a>
+        <a href="#" class="footer-link">Pulseras</a>
+        <a href="#" class="footer-link">Sets Completos</a>
+        <a href="#" class="footer-link">Novedades</a>
+      </div>
+      <div>
+        <div class="font-cinzel" style="font-size:0.65rem;letter-spacing:0.3em;color:var(--gold);text-transform:uppercase;margin-bottom:1.5rem;">Información</div>
+        <a href="#" class="footer-link">Sobre Nosotros</a>
+        <a href="#" class="footer-link">Certificaciones</a>
+        <a href="#" class="footer-link">Cuidado de Joyas</a>
+        <a href="#" class="footer-link">Personalización</a>
+        <a href="#" class="footer-link">Blog</a>
+        <a href="#" class="footer-link">Prensa</a>
+      </div>
+      <div>
+        <div class="font-cinzel" style="font-size:0.65rem;letter-spacing:0.3em;color:var(--gold);text-transform:uppercase;margin-bottom:1.5rem;">Contacto</div>
+        <p style="font-size:0.82rem;color:rgba(245,240,232,0.45);margin-bottom:0.6rem;">✦ Bogotá, Colombia</p>
+        <p style="font-size:0.82rem;color:rgba(245,240,232,0.45);margin-bottom:0.6rem;">✦ info@destelloamatista.com</p>
+        <p style="font-size:0.82rem;color:rgba(245,240,232,0.45);margin-bottom:1.5rem;">✦ +57 310 000 0000</p>
+        <div class="font-cinzel" style="font-size:0.6rem;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;margin-bottom:0.5rem;">Horario</div>
+        <p style="font-size:0.82rem;color:rgba(245,240,232,0.45);">Lun – Sáb: 9am – 7pm</p>
+      </div>
+    </div>
+
+    <div class="gold-line" style="margin-bottom:2rem;"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+      <div class="font-cinzel" style="font-size:0.55rem;letter-spacing:0.2em;color:rgba(245,240,232,0.25);text-transform:uppercase;">
+        © 2025 Destello Amatista. Todos los derechos reservados.
+      </div>
+      <div style="display:flex;gap:2rem;">
+        <a href="#" class="footer-link" style="font-size:0.7rem;margin-bottom:0;">Privacidad</a>
+        <a href="#" class="footer-link" style="font-size:0.7rem;margin-bottom:0;">Términos</a>
+        <a href="#" class="footer-link" style="font-size:0.7rem;margin-bottom:0;">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ====== JAVASCRIPT ====== -->
+<script>
+  // ---- CURSOR ----
+  const cursor = document.getElementById('cursor');
+  const cursorRing = document.getElementById('cursorRing');
+  let mouseX = 0, mouseY = 0;
+  let ringX = 0, ringY = 0;
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top = mouseY + 'px';
+  });
+
+  function animateRing() {
+    ringX += (mouseX - ringX) * 0.12;
+    ringY += (mouseY - ringY) * 0.12;
+    cursorRing.style.left = ringX + 'px';
+    cursorRing.style.top = ringY + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.querySelectorAll('button, a, .product-card, .category-card, input').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
+      cursorRing.style.transform = 'translate(-50%,-50%) scale(1.5)';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+      cursorRing.style.transform = 'translate(-50%,-50%) scale(1)';
+    });
+  });
+
+  // ---- NAV SCROLL ----
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    if (window.scrollY > 60) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+  });
+
+  // ---- REVEAL ANIMATION ----
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // ---- PRODUCTS DATA ----
+  const products = [
+    { id:1, name:'Anillo Esencia Dorada', category:'anillos', tag:'nuevo', icon:'💍', price:890000, oldPrice:null, rating:5, material:'Oro 18K · Diamante' },
+    { id:2, name:'Collar Destello Violeta', category:'collares', tag:'exclusivo', icon:'📿', price:1250000, oldPrice:null, rating:5, material:'Oro 18K · Amatista' },
+    { id:3, name:'Aretes Luna Llena', category:'aretes', tag:'oferta', icon:'✨', price:450000, oldPrice:680000, rating:4, material:'Oro 14K · Perla' },
+    { id:4, name:'Pulsera Imperio', category:'pulseras', tag:'nuevo', icon:'🌟', price:720000, oldPrice:null, rating:5, material:'Oro 18K · Rubí' },
+    { id:5, name:'Set Noche Estrellada', category:'sets', tag:'exclusivo', icon:'💎', price:2100000, oldPrice:null, rating:5, material:'Oro 24K · Zafiro' },
+    { id:6, name:'Anillo Eternidad', category:'anillos', tag:'oferta', icon:'💍', price:650000, oldPrice:980000, rating:4, material:'Oro 18K · Esmeralda' },
+    { id:7, name:'Collar Cadena Venecia', category:'collares', tag:'nuevo', icon:'📿', price:380000, oldPrice:null, rating:5, material:'Oro 14K' },
+    { id:8, name:'Aretes Cascada', category:'aretes', tag:'exclusivo', icon:'✨', price:920000, oldPrice:null, rating:5, material:'Oro 18K · Topacio' },
+  ];
+
+  let cart = [];
+  let currentFilter = 'todos';
+  let shownCount = 8;
+
+  function formatPrice(p) {
+    return '$' + p.toLocaleString('es-CO');
+  }
+
+  function renderProducts(filter) {
+    const grid = document.getElementById('productGrid');
+    let filtered = products;
+    if (filter !== 'todos') filtered = products.filter(p => p.tag === filter);
+    filtered = filtered.slice(0, shownCount);
+
+    grid.innerHTML = filtered.map(p => `
+      <div class="product-card reveal" id="prod-${p.id}">
+        <div class="product-img-wrap">
+          <div class="product-img-bg">
+            ${p.icon}
+            <div class="product-overlay">
+              <button class="btn-gold" style="font-size:0.55rem;padding:10px 18px;" onclick="addToCart(${p.id})">+ Carrito</button>
+              <button class="btn-outline" style="font-size:0.55rem;padding:9px 14px;" onclick="quickView(${p.id})">Ver</button>
+            </div>
+          </div>
+          <span class="product-tag tag-${p.tag}">${p.tag === 'nuevo' ? 'Nuevo' : p.tag === 'oferta' ? 'Oferta' : 'Exclusivo'}</span>
+          <button class="wishlist-btn" id="wish-${p.id}" onclick="toggleWishlist(${p.id})">♡</button>
+        </div>
+        <div style="padding:1.4rem;">
+          <div class="product-category" style="margin-bottom:0.5rem;">${p.material}</div>
+          <div class="product-name" style="margin-bottom:0.8rem;">${p.name}</div>
+          <div class="rating" style="margin-bottom:1rem;">
+            ${Array(5).fill(0).map((_,i) => `<span style="opacity:${i < p.rating ? 1 : 0.2}">★</span>`).join('')}
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div class="product-price">${formatPrice(p.price)}</div>
+              ${p.oldPrice ? `<div class="product-price-old">${formatPrice(p.oldPrice)}</div>` : ''}
+            </div>
+            <button class="btn-icon" onclick="addToCart(${p.id})">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    // Re-observe new reveals
+    grid.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  }
+
+  function setFilter(btn, filter) {
+    currentFilter = filter;
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    shownCount = 8;
+    renderProducts(filter);
+  }
+
+  function filterCategory(cat) {
+    document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth' });
+    currentFilter = cat;
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    renderProducts(cat);
+  }
+
+  function loadMore() {
+    shownCount += 4;
+    renderProducts(currentFilter);
+  }
+
+  // ---- CART ----
+  function addToCart(id) {
+    const product = products.find(p => p.id === id);
+    const existing = cart.find(c => c.id === id);
+    if (existing) existing.qty++;
+    else cart.push({ ...product, qty: 1 });
+    updateCartUI();
+    showNotification('✦ ' + product.name + ' añadido');
+  }
+
+  function updateCartUI() {
+    const badge = document.getElementById('cartBadge');
+    const total = cart.reduce((s, c) => s + c.price * c.qty, 0);
+    const count = cart.reduce((s, c) => s + c.qty, 0);
+
+    badge.style.display = count > 0 ? 'flex' : 'none';
+    badge.textContent = count;
+    document.getElementById('cartTotal').textContent = formatPrice(total);
+
+    const items = document.getElementById('cartItems');
+    const empty = document.getElementById('emptyCart');
+
+    if (cart.length === 0) {
+      empty.style.display = 'block';
+      items.innerHTML = '';
+      items.appendChild(empty);
+    } else {
+      items.innerHTML = cart.map(item => `
+        <div style="display:flex;gap:1rem;align-items:center;padding:1rem 0;border-bottom:1px solid rgba(201,168,76,0.08);">
+          <div style="font-size:2.5rem;background:var(--black-mid);width:60px;height:60px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(201,168,76,0.1);">${item.icon}</div>
+          <div style="flex:1;min-width:0;">
+            <div class="font-cormorant" style="font-size:0.95rem;line-height:1.3;margin-bottom:0.3rem;">${item.name}</div>
+            <div class="font-cinzel" style="font-size:0.55rem;letter-spacing:0.2em;color:var(--gold);">Cant: ${item.qty}</div>
+          </div>
+          <div>
+            <div class="product-price" style="font-size:1rem;">${formatPrice(item.price * item.qty)}</div>
+            <button onclick="removeFromCart(${item.id})" style="background:none;border:none;color:rgba(245,240,232,0.3);font-size:0.7rem;cursor:none;float:right;margin-top:4px;transition:color 0.3s;" onmouseover="this.style.color='#e53e3e'" onmouseout="this.style.color='rgba(245,240,232,0.3)'">✕ Quitar</button>
+          </div>
+        </div>
+      `).join('');
+    }
+  }
+
+  function removeFromCart(id) {
+    cart = cart.filter(c => c.id !== id);
+    updateCartUI();
+  }
+
+  function toggleCart() {
+    document.getElementById('cartSidebar').classList.toggle('open');
+    document.getElementById('cartOverlay').classList.toggle('open');
+  }
+
+  function checkout() {
+    if (cart.length === 0) { alert('Tu carrito está vacío'); return; }
+    const total = cart.reduce((s, c) => s + c.price * c.qty, 0);
+    alert(`¡Gracias por tu compra!\nTotal: ${formatPrice(total)}\n\nTe contactaremos pronto para confirmar tu pedido. ✦`);
+    cart = [];
+    updateCartUI();
+    toggleCart();
+  }
+
+  // ---- WISHLIST ----
+  let wishlist = new Set();
+  function toggleWishlist(id) {
+    const btn = document.getElementById('wish-' + id);
+    if (wishlist.has(id)) {
+      wishlist.delete(id);
+      btn.classList.remove('active');
+      btn.textContent = '♡';
+    } else {
+      wishlist.add(id);
+      btn.classList.add('active');
+      btn.textContent = '♥';
+      showNotification('✦ Añadido a favoritos');
+    }
+  }
+
+  // ---- QUICK VIEW ----
+  function quickView(id) {
+    const p = products.find(x => x.id === id);
+    alert(`${p.icon} ${p.name}\n\nMaterial: ${p.material}\nPrecio: ${formatPrice(p.price)}\nCalificación: ${'★'.repeat(p.rating)}\n\n¡Próximamente vista rápida completa!`);
+  }
+
+  // ---- NOTIFICATION ----
+  function showNotification(msg) {
+    const n = document.getElementById('notification');
+    n.textContent = msg;
+    n.classList.add('show');
+    setTimeout(() => n.classList.remove('show'), 2800);
+  }
+
+  // ---- MOBILE MENU ----
+  function toggleMobileMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+  function closeMobileMenu() {
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+
+  // ---- NEWSLETTER ----
+  function subscribeNewsletter() {
+    const email = document.getElementById('emailInput').value;
+    if (!email || !email.includes('@')) {
+      showNotification('✦ Ingresa un correo válido');
+      return;
+    }
+    showNotification('✦ ¡Bienvenido! 10% OFF en tu código');
+    document.getElementById('emailInput').value = '';
+  }
+
+  // ---- COUNTDOWN TIMER ----
+  let countdownEnd = new Date().getTime() + (8 * 3600 + 34 * 60 + 59) * 1000;
+  function updateCountdown() {
+    const now = new Date().getTime();
+    const diff = countdownEnd - now;
+    if (diff <= 0) { countdownEnd = new Date().getTime() + 24*3600*1000; return; }
+    const h = Math.floor(diff / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('cdHours').textContent = String(h).padStart(2,'0');
+    document.getElementById('cdMins').textContent = String(m).padStart(2,'0');
+    document.getElementById('cdSecs').textContent = String(s).padStart(2,'0');
+  }
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+
+  // ---- COUNTER ANIMATION ----
+  function animateCounter(el, target, duration, suffix='') {
+    let start = 0;
+    const step = target / (duration / 16);
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= target) { start = target; clearInterval(timer); }
+      el.textContent = Math.floor(start) + suffix;
+    }, 16);
+  }
+
+  const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        animateCounter(document.getElementById('statPiezas'), 99, 1500, '+');
+        animateCounter(document.getElementById('statClientes'), 4800, 1800, '+');
+        animateCounter(document.getElementById('statAnos'), 20, 1200);
+        animateCounter(document.getElementById('statColecciones'), 12, 1000);
+        statsObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+  statsObserver.observe(document.getElementById('statPiezas'));
+
+  // ---- HERO REVEALS ----
+  setTimeout(() => {
+    ['rev1','rev2','rev3','rev4'].forEach((id, i) => {
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('visible');
+      }, i * 180);
+    });
+  }, 300);
+
+  // ---- INIT PRODUCTS ----
+  renderProducts('todos');
+</script>
+
+<style>
+  @keyframes pulse-line {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+  @media (max-width: 768px) {
+    .hero-title { font-size: 3.5rem !important; }
+    .section-title { font-size: 2rem !important; }
+    div[style*="grid-template-columns:2fr 1fr 1fr 1fr"] { grid-template-columns: 1fr 1fr !important; }
+    div[style*="grid-template-columns:1fr 1fr"] { grid-template-columns: 1fr !important; }
+    .cart-sidebar { width: 100% !important; }
+  }
+</style>
 </body>
 </html>
